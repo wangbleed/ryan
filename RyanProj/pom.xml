@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.ryan</groupId>
+    <artifactId>ryanproj</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>RyanProject</name>
+    <url>http://maven.apache.org</url>
+
+    <modules>
+        <module>ryan-spring-boot-sample</module>
+    </modules>
+
+    <developers>
+        <developer>
+            <id>all</id>
+            <name>Ryan</name>
+            <email>wangbleed@gmail.com</email>
+            <roles>
+                <role>Project Leader</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <inceptionYear>2014 V1.0</inceptionYear>
+
+    <properties>
+        <main.basedir>${basedir}</main.basedir>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            
+        </dependencies>
+    </dependencyManagement>
+</project>
+
