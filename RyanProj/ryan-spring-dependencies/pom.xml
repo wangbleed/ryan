@@ -14,6 +14,8 @@
 
 	<properties>
         <springframework.version>4.1.2.RELEASE</springframework.version>
+        <spring.security.version>3.2.5.RELEASE</spring.security.version>
+        <spring.amqp.version>1.4.0.RELEASE</spring.amqp.version>
 	</properties>
 	<prerequisites>
 		<maven>3.0.0</maven>
@@ -41,6 +43,37 @@
                 <artifactId>spring-webmvc</artifactId>
                 <version>${springframework.version}</version>
             </dependency>
-		</dependencies>
+
+            <!-- security-->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-web</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+
+            <!-- MQ-->
+            <dependency>
+                <groupId>org.springframework.amqp</groupId>
+                <artifactId>spring-amqp</artifactId>
+                <version>${spring.amqp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.amqp</groupId>
+                <artifactId>spring-rabbit</artifactId>
+                <version>${spring.amqp.version}</version>
+            </dependency>
+
+
+        </dependencies>
 	</dependencyManagement>
 </project>

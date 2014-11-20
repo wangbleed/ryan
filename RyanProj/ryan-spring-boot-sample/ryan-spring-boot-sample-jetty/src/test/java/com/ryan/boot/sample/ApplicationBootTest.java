@@ -12,8 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+
+import java.util.Map;
+
+import static org.junit.Assert.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,9 +36,13 @@ public class ApplicationBootTest {
     private Integer port;
 
     @Test
-    public void testHome(){
-        ResponseEntity<String> entity = new TestRestTemplate().getForEntity("http://localhost:"+this.port, String.class);
+    public void testHome() throws Exception {
+        @SuppressWarnings("rawtypes")
+        ResponseEntity<Map> entity = new TestRestTemplate().getForEntity("http://localhost:" + this.port, Map.class);
         assertEquals(HttpStatus.OK, entity.getStatusCode());
-        assertNotNull(entity.getBody());
+        @SuppressWarnings("unchecked")
+        Map<String, Object> body = entity.getBody();
+        assertEquals("Hello, Ryan", body.get("message"));
+        assertFalse("Wrong headers: " + entity.getHeaders(), entity.getHeaders().containsKey("Set-Cookie"));
     }
 }

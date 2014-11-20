@@ -1,7 +1,7 @@
 package com.ryan.boot.sample.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,7 +13,10 @@ import java.util.Date;
 @Component
 public class HomeService {
 
-    public String getHome(){
-        return "Hello, " + new Date();
+    @Autowired
+    private ServicePropeties servicePropeties;
+
+    public String getMessage(){
+        return "Hello, " + servicePropeties.getName();
     }
 }

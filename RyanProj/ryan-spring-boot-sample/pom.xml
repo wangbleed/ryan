@@ -272,7 +272,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-ws</artifactId>
-                <version>1.2.0.BUILD-SNAPSHOT</version>
+                <version>${spring-boot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
