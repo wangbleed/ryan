@@ -1,13 +1,10 @@
 package com.ryan.boot.sample.commons;
 
-import com.ryan.boot.sample.Sender;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor;
 
@@ -36,14 +33,12 @@ public class AMQPUtil {
         return new ScheduledAnnotationBeanPostProcessor();
     }
 
-    @Bean
+//    @Bean
     public SimpleMessageListenerContainer container() {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer(
-                this.connectionFactory);
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer(this.connectionFactory);
         Object listener = new Object() {
-            @SuppressWarnings("unused")
-            public void handleMessage(String foo) {
-                System.out.println(foo);
+            public void handleMessage(String msg) {
+                System.out.println(msg);
             }
         };
         MessageListenerAdapter adapter = new MessageListenerAdapter(listener);
@@ -52,7 +47,4 @@ public class AMQPUtil {
         return container;
     }
 
-    public static void main(String[] args){
-        SpringApplication.run(AMQPUtil.class, args);
-    }
 }
