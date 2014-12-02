@@ -89,6 +89,16 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.ryan.boot.sample.ApplicationBoot</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <configuration>
+
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
