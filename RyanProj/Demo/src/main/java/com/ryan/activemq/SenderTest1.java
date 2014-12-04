@@ -1,9 +1,9 @@
 package com.ryan.activemq;
 
 import com.ryan.entity.MsgPacket;
-import com.ryan.packet.Message;
-import com.ryan.packet.MessageContent;
-import com.ryan.packet.MessageHead;
+import com.ryan.io.packet.Message;
+import com.ryan.io.packet.MessageContent;
+import com.ryan.io.packet.MessageHead;
 import org.apache.activemq.ActiveMQConnection;
 
 import java.util.UUID;

@@ -44,13 +44,13 @@ public class ActiveMQUtil implements ConnectionIO{
         return bConnect;
     }
 
-    public void send(com.ryan.packet.Message... messages){
+    public void send(com.ryan.io.packet.Message... messages){
         if(!bConnected() || messages == null || messages.length <= 0)
             return;
         try{
             ObjectMessage msg;
             int count = 0;
-            for(com.ryan.packet.Message message : messages){
+            for(com.ryan.io.packet.Message message : messages){
                 msg = session.createObjectMessage();
                 msg.setObject(message);
                 producer.send(msg);

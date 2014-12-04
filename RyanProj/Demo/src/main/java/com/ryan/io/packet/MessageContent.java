@@ -1,4 +1,4 @@
-package com.ryan.packet;
+package com.ryan.io.packet;
 
 import java.io.Serializable;
 

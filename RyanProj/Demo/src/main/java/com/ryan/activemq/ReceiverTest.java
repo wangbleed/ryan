@@ -10,8 +10,6 @@ package com.ryan.activemq;
 import javax.jms.*;
 
 import com.google.gson.Gson;
-import com.ryan.entity.MsgPacket;
-import com.ryan.packet.*;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
@@ -45,7 +43,7 @@ public class ReceiverTest {
                 // 设置接收者接收消息的时间，为了便于测试，这里谁定为ss
                 ObjectMessage message = (ObjectMessage) consumer.receive(2000);
                 if (null != message) {
-                    System.out.println("收到消息" +  new Gson().toJson((com.ryan.packet.Message) message.getObject()));
+                    System.out.println("收到消息" +  new Gson().toJson((com.ryan.io.packet.Message) message.getObject()));
                 } else {
                     break;
                 }

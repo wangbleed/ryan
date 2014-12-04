@@ -1,6 +1,6 @@
 package com.ryan.entity;
 
-import com.ryan.packet.Packet;
+import com.ryan.io.packet.Packet;
 
 /**
  * Created with IntelliJ IDEA.
