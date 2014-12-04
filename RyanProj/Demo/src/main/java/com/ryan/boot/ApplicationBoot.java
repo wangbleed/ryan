@@ -17,10 +17,10 @@ public class ApplicationBoot {
     public static void main(String[] args){
         SpringApplication.run(ApplicationBoot.class, args);
 
-        FirstExample.Person.Builder builder = FirstExample.Person.newBuilder();
-        builder.setId(1111);
-        builder.setEmail("wang_bleed@126.com");
-        builder.setName("Ryan");
+//        FirstExample.Person.Builder builder = FirstExample.Person.newBuilder();
+//        builder.setId(1111);
+//        builder.setEmail("wang_bleed@126.com");
+//        builder.setName("Ryan");
 
     }
 }

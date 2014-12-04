@@ -71,13 +71,6 @@ public class HomeController {
         throw new IllegalArgumentException("Server error");
     }
 
-    @Bean
-    public SecurityProperties securityProperties() {
-        SecurityProperties security = new SecurityProperties();
-        security.getBasic().setPath(""); // empty so home page is unsecured
-        return security;
-    }
-
     protected static class Message {
 
         @NotEmpty(message = "Message value cannot be empty")

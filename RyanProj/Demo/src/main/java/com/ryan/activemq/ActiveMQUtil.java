@@ -3,6 +3,8 @@ package com.ryan.activemq;
 import com.ryan.io.ConnectionConfig;
 import com.ryan.io.ConnectionIO;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.context.annotation.Bean;
+
 import javax.jms.*;
 
 /**
@@ -104,5 +106,10 @@ public class ActiveMQUtil implements ConnectionIO{
             e.printStackTrace();
         }
         return bFlag;
+    }
+
+    @Bean
+    public ActiveMQConnectionFactory getConnectionFactory(){
+        return new ActiveMQConnectionFactory();
     }
 }

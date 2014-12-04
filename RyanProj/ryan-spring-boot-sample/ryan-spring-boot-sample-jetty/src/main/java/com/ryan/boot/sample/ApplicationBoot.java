@@ -1,7 +1,9 @@
 package com.ryan.boot.sample;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,11 +12,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Time: 下午2:55
  * To change this template use File | Settings | File Templates.
  */
-//@SpringBootApplication
+@SpringBootApplication
+@EnableAutoConfiguration
+@ComponentScan
 public class ApplicationBoot {
 
     public static void main(String[] args){
         System.out.println("#FFFFFFFFFFFF");
-//        SpringApplication.run(ApplicationBoot.class, args);
+        SpringApplication.run(ApplicationBoot.class, args);
     }
 }

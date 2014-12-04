@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
  * Time: 下午3:44
  * To change this template use File | Settings | File Templates.
  */
+
 public class ActiveMQConnectConfig implements ConnectionConfig{
     final int DEFAULT_BATCH_NUM = 1;
     String username;
