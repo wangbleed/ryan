@@ -1,5 +1,6 @@
 package com.ryan.boot;
 
+import com.ryan.protocol.protobuf.FirstExample;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -14,7 +15,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ApplicationBoot {
 
     public static void main(String[] args){
-        System.out.println("#FFFFFFFFFFFF");
         SpringApplication.run(ApplicationBoot.class, args);
+
+        FirstExample.Person.Builder builder = FirstExample.Person.newBuilder();
+        builder.setId(1111);
+        builder.setEmail("wang_bleed@126.com");
+        builder.setName("Ryan");
+
     }
 }
