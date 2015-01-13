@@ -20,7 +20,7 @@
 
     <properties>
         <!-- Spring Boot -->
-        <spring-boot.version>1.2.0.BUILD-SNAPSHOT</spring-boot.version>
+        <spring-boot.version>1.2.1.RELEASE</spring-boot.version>
     </properties>
 
     <dependencyManagement>

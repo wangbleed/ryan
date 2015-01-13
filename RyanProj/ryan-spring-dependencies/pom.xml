@@ -12,18 +12,15 @@
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
 
-	<properties>
-        <springframework.version>4.1.2.RELEASE</springframework.version>
-        <spring.security.version>3.2.5.RELEASE</spring.security.version>
-        <spring.amqp.version>1.4.0.RELEASE</spring.amqp.version>
-        <spring.batch.version>3.0.2.RELEASE</spring.batch.version>
-        <aspect.version>1.8.4</aspect.version>
-	</properties>
-	<prerequisites>
-		<maven>3.0.0</maven>
-	</prerequisites>
-	<dependencyManagement>
-		<dependencies>
+    <prerequisites>
+        <maven>3.0.0</maven>
+    </prerequisites>
+    <modules>
+        <module>../ryan-spring-batch-sample</module>
+        <module>../ryan-spring-boot-sample</module>
+    </modules>
+    <dependencyManagement>
+        <dependencies>
             <!-- spring framework -->
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -33,6 +30,21 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
+                <version>${springframework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${springframework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${springframework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
                 <version>${springframework.version}</version>
             </dependency>
             <dependency>
@@ -49,6 +61,22 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-aop</artifactId>
                 <version>${springframework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${springframework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-jpa</artifactId>
+                <version>${spring.data.jpa.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${springframework.version}</version>
+                <scope>test</scope>
             </dependency>
             <!-- batch-->
             <dependency>
@@ -100,7 +128,6 @@
             </dependency>
 
 
-
         </dependencies>
-	</dependencyManagement>
+    </dependencyManagement>
 </project>

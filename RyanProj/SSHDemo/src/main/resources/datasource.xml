@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd"
+       >
+
+    <!-- local development环境 -->
+    <beans profile="development">
+        <context:property-placeholder ignore-resource-not-found="true" location="classpath:env_local.properties"/>
+
+        <!-- 数据源配置, 使用c3p0数据库连接池 -->
+        <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+            <property name="driverClass" value="${jdbc.driver}"/>
+            <property name="jdbcUrl" value="${jdbc.url}"/>
+            <property name="user" value="${jdbc.user}"/>
+            <property name="password" value="${jdbc.password}"/>
+            <!-- 初始化时创建的连接数，应在minPoolSize与maxPoolSize之间取值-->
+            <property name="initialPoolSize" value="${jdbc.initialpoolsize}"/>
+            <!-- 连接池中保留的最小连接数 -->
+            <property name="minPoolSize" value="${jdbc.minpoolsize}"/>
+            <!-- 连接池中保留的最大连接数 -->
+            <property name="maxPoolSize" value="${jdbc.maxpoolsize}"/>
+            <!-- 当连接池中的连接用完时，一次性创建新连接的数目 -->
+            <property name="acquireIncrement" value="${jdbc.acquireincrement}"/>
+            <!-- 定义在从数据库获取新连接失败后重复尝试获取的次数，默认：30 -->
+            <property name="acquireRetryAttempts" value="${jdbc.acquireRetryAttempts}"/>
+            <!-- 两次连接中间隔时间，单位毫秒 -->
+            <property name="acquireRetryDelay" value="${jdbc.acquireRetryDelay}"/>
+            <!-- 当连接池用完时客户端调用getConnection()后等待获取新连接的时间，超时后将抛出SQLException
+                如设为0则无限期等待。单位毫秒，默认为0，这里是10秒 -->
+            <property name="checkoutTimeout" value="${jdbc.checkoutTimeout}"/>
+            <!-- 每60秒检查所有连接池中的空闲连接 -->
+            <property name="idleConnectionTestPeriod" value="${jdbc.idleconnectiontestperiod}"/>
+            <!-- 最大空闲时间，120秒内未使用的则连接被丢弃 -->
+            <property name="maxIdleTime" value="${jdbc.maxidletime}"/>
+            <!-- 定义所有连接测试都执行的测试语句 -->
+            <property name="preferredTestQuery" value="select 1 from dual"/>
+            <!-- 如果设为true那么在取得连接的同时将校验连接的有效性 -->
+            <property name="testConnectionOnCheckin" value="true"/>
+            <!-- 预缓存-->
+            <property name="maxStatements" value="${jdbc.maxstatements}"/>
+        </bean>
+
+        <!-- 初始化数据表结构 与默认数据-->
+        <!--<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">-->
+            <!--<jdbc:script location="classpath:sql/h2/schema.sql" />-->
+            <!--<jdbc:script location="classpath:data/import-data.sql" encoding="UTF-8"/>-->
+        <!--</jdbc:initialize-database>-->
+    </beans>
+</beans>

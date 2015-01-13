@@ -8,10 +8,12 @@
     <name>RyanProject</name>
 
     <modules>
-        <!-- import spring dependency-->
+        <!-- Spring 依赖库-->
         <module>ryan-spring-dependencies</module>
-        <module>ryan-spring-boot-sample</module>
-        <module>ryan-spring-batch-sample</module>
+        <!-- 常用库-->
+        <module>ryan-commons</module>
+        <!-- Spring + Spring MVC + Hibernate 基本框架-->
+        <module>SSHDemo</module>
         <module>Demo</module>
     </modules>
 
@@ -33,10 +35,48 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.7</java.version>
         <junit.version>4.11</junit.version>
-        <hibernate.version>5.1.3.Final</hibernate.version>
-        <log.version>1.1.2</log.version>
+
+        <ryan.commons.version>${project.version}</ryan.commons.version>
+
+        <!-- spring -->
+        <springframework.version>4.1.3.RELEASE</springframework.version>
+        <spring.security.version>3.2.5.RELEASE</spring.security.version>
+        <spring.data.jpa.version>1.7.0.RELEASE</spring.data.jpa.version>
+        <spring.amqp.version>1.4.0.RELEASE</spring.amqp.version>
+        <spring.batch.version>3.0.2.RELEASE</spring.batch.version>
+
+        <!-- hibernate -->
+        <hibernate.version>4.1.10.Final</hibernate.version>
+        <hibernate.valid.version>5.1.3.Final</hibernate.valid.version>
+        <hibernate.entity.version>4.2.5.Final</hibernate.entity.version>
+        <hibernate.annotations.version>3.5.6-Final</hibernate.annotations.version>
+        <hibernate.common.annotations.version>3.2.0.Final</hibernate.common.annotations.version>
+
+        <!-- db -->
+        <mysql-connector-java.version>5.1.23</mysql-connector-java.version>
+        <oralce.version>10.2.0.4.0</oralce.version>
+        <jtds.version>1.3.1</jtds.version>
+        <c3p0.version>0.9.1.2</c3p0.version>
+
+        <aspect.version>1.8.4</aspect.version>
+        <!-- json -->
         <gson.version>2.3.1</gson.version>
+        <!-- log -->
+        <logback.version>1.1.2</logback.version>
+        <slf4j.version>1.7.9</slf4j.version>
+        <log4j.version>1.2.15</log4j.version>
+
+        <!-- apache -->
+        <apache.commons.version>3.1</apache.commons.version>
+        <thrift.version>0.9.0</thrift.version>
+        <!-- google -->
+        <google.guava.version>13.0</google.guava.version>
         <google.protobuf.version>2.6.1</google.protobuf.version>
+
+        <!-- MQ -->
+        <activemq.version>5.10.0</activemq.version>
+        <!-- thrift -->
+        <thrift.version>0.9.0</thrift.version>
     </properties>
 
     <dependencyManagement>
@@ -44,20 +84,63 @@
             <!-- Hibernate -->
             <dependency>
                 <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-validator</artifactId>
+                <artifactId>hibernate-core</artifactId>
                 <version>${hibernate.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate.valid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-entitymanager</artifactId>
+                <version>${hibernate.entity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-commons-annotations</artifactId>
+                <version>${hibernate.common.annotations.version}</version>
+            </dependency>
 
-            <!-- logback -->
+            <!-- c3p0 -->
+            <dependency>
+                <groupId>c3p0</groupId>
+                <artifactId>c3p0</artifactId>
+                <version>${c3p0.version}</version>
+            </dependency>
+
+            <!-- Logging -->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
-                <version>${log.version}</version>
+                <version>${logback.version}</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>${log.version}</version>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
             </dependency>
 
             <!-- third Party-->
@@ -77,7 +160,49 @@
                 <artifactId>gson</artifactId>
                 <version>${gson.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${google.guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.thrift</groupId>
+                <artifactId>libthrift</artifactId>
+                <version>${thrift.version}</version>
+            </dependency>
 
+            <!-- DB Driver -->
+            <!-- MySql -->
+            <!--
+                现在数据库暂时用mysql，如果需要oracle或sqlserver，只要做如下步骤：
+                    1、在alarmcenter工程下的pom.xml增加对应的依赖
+                    2、在对应的evn_*.properties中，
+                        将jdbc.driver的值修改为对应的驱动名称
+                        oracle:oracle.jdbc.driver.OracleDriver
+                        sqlserver: 2000:     com.microsoft.jdbc.sqlserver.SQLServerDriver
+                                   2005以后：com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+                        将hibernate.dialect的值修改为对应的dialect
+                        oracle:org.hibernate.dialect.OracleDialect
+                        sqlserver:org.hibernate.dialect.SQLServerDialect
+                 -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector-java.version}</version>
+            </dependency>
+            <!-- Oracle 支持oracle 10.2.x-->
+            <dependency>
+                <groupId>com.oracle</groupId>
+                <artifactId>ojdbc14</artifactId>
+                <version>${oralce.version}</version>
+            </dependency>
+            <!-- support Microsoft SQL Server (6.5, 7, 2000, 2005, 2008, 2012) and Sybase ASE (10, 11, 12, 15)-->
+            <dependency>
+                <groupId>net.sourceforge.jtds</groupId>
+                <artifactId>jtds</artifactId>
+                <version>${jtds.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
