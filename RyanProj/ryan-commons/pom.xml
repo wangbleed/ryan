@@ -10,9 +10,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ryan.commons</groupId>
-    <artifactId>ryan-commons</artifactId>
+    <artifactId>commons</artifactId>
     <packaging>jar</packaging>
-    <version>${project.parent.parent.version}</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>
         * 常用库

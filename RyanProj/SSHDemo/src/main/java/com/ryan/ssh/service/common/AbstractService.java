@@ -1,6 +1,6 @@
-package com.hyron.alarmcenter.service.common;
+package com.ryan.ssh.service.common;
 
-import com.hyron.commons.dao.common.IOperations;
+import com.ryan.commons.dao.common.IOperations;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;

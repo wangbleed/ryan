@@ -1,7 +1,7 @@
-package com.hyron.alarmcenter.controller;
+package com.ryan.ssh.controller;
 
-import com.hyron.alarmcenter.entity.User;
-import com.hyron.alarmcenter.service.IUserService;
+import com.ryan.ssh.entity.User;
+import com.ryan.ssh.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

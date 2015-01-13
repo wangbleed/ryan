@@ -1,8 +1,8 @@
-package com.hyron.alarmcenter.mq.impl;
+package com.ryan.ssh.mq.impl;
 
-import com.hyron.alarmcenter.cache.CacheQueueFIFO;
-import com.hyron.alarmcenter.mq.MQService;
-import com.hyron.commons.packet.MQPacket;
+import com.ryan.ssh.cache.CacheQueueFIFO;
+import com.ryan.ssh.mq.MQService;
+import com.ryan.commons.packet.MQPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

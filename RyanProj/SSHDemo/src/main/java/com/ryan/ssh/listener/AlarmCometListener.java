@@ -1,12 +1,10 @@
-package com.hyron.alarmcenter.listener;
+package com.ryan.ssh.listener;
 
-import com.google.gson.Gson;
-import com.hyron.alarmcenter.cache.CacheQueueFIFO;
-import com.hyron.alarmcenter.util.Constant;
+import com.ryan.ssh.cache.CacheQueueFIFO;
+import com.ryan.ssh.util.Constant;
 import org.apache.commons.lang3.StringUtils;
 import org.comet4j.core.CometContext;
 import org.comet4j.core.CometEngine;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

@@ -1,9 +1,8 @@
-package com.hyron.commons.dao.common;
+package com.ryan.commons.dao.common;
 
 import com.google.common.base.Preconditions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;

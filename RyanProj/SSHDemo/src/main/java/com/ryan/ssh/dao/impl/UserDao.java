@@ -1,8 +1,8 @@
-package com.hyron.alarmcenter.dao.impl;
+package com.ryan.ssh.dao.impl;
 
-import com.hyron.alarmcenter.dao.IUserDao;
-import com.hyron.alarmcenter.entity.User;
-import com.hyron.commons.dao.common.AbstractHibernateDao;
+import com.ryan.ssh.dao.IUserDao;
+import com.ryan.ssh.entity.User;
+import com.ryan.commons.dao.common.AbstractHibernateDao;
 import org.springframework.stereotype.Repository;
 
 /**

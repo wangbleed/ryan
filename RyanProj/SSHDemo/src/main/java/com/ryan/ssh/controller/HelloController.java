@@ -1,4 +1,4 @@
-package com.hyron.alarmcenter.controller;
+package com.ryan.ssh.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

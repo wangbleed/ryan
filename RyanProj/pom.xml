@@ -77,6 +77,8 @@
         <activemq.version>5.10.0</activemq.version>
         <!-- thrift -->
         <thrift.version>0.9.0</thrift.version>
+
+        <javassist.version>3.12.1.GA</javassist.version>
     </properties>
 
     <dependencyManagement>

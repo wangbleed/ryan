@@ -1,16 +1,14 @@
-package com.hyron.alarmcenter.mq;
+package com.ryan.ssh.mq;
 
 import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
-import com.hyron.commons.mq.ActiveMQConnectFactory;
-import com.hyron.commons.packet.MQPacket;
-import com.hyron.commons.service.Service;
+import com.ryan.commons.mq.ActiveMQConnectFactory;
+import com.ryan.commons.packet.MQPacket;
+import com.ryan.commons.service.Service;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.jms.*;
-import java.io.Serializable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;

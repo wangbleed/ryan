@@ -59,7 +59,7 @@
 
         <dependency>
             <groupId>com.ryan.commons</groupId>
-            <artifactId>ryan-commons</artifactId>
+            <artifactId>commons</artifactId>
             <version>${ryan.commons.version}</version>
         </dependency>
 

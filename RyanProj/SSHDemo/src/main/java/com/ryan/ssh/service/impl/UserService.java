@@ -1,10 +1,10 @@
-package com.hyron.alarmcenter.service.impl;
+package com.ryan.ssh.service.impl;
 
-import com.hyron.alarmcenter.dao.IUserDao;
-import com.hyron.alarmcenter.entity.User;
-import com.hyron.alarmcenter.service.IUserService;
-import com.hyron.alarmcenter.service.common.AbstractService;
-import com.hyron.commons.dao.common.IOperations;
+import com.ryan.ssh.dao.IUserDao;
+import com.ryan.ssh.entity.User;
+import com.ryan.ssh.service.IUserService;
+import com.ryan.ssh.service.common.AbstractService;
+import com.ryan.commons.dao.common.IOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

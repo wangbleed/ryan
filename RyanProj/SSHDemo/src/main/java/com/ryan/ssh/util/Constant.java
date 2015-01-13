@@ -1,4 +1,4 @@
-package com.hyron.alarmcenter.util;
+package com.ryan.ssh.util;
 
 /**
  * Created by Ryan on 2015/1/6.

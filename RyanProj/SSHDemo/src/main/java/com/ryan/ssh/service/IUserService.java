@@ -1,7 +1,7 @@
-package com.hyron.alarmcenter.service;
+package com.ryan.ssh.service;
 
-import com.hyron.alarmcenter.entity.User;
-import com.hyron.commons.dao.common.IOperations;
+import com.ryan.ssh.entity.User;
+import com.ryan.commons.dao.common.IOperations;
 
 /**
  * Created by ryan on 15/1/5.

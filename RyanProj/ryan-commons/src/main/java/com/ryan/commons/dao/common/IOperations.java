@@ -1,4 +1,4 @@
-package com.hyron.commons.dao.common;
+package com.ryan.commons.dao.common;
 
 import java.io.Serializable;
 import java.util.List;

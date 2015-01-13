@@ -1,6 +1,6 @@
-package com.hyron.commons.mq;
+package com.ryan.commons.mq;
 
-import com.hyron.commons.io.ConnectionIO;
+import com.ryan.commons.io.ConnectionIO;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

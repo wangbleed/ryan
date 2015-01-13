@@ -1,4 +1,4 @@
-package com.hyron.alarmcenter.entity;
+package com.ryan.ssh.entity;
 
 import com.google.gson.Gson;
 

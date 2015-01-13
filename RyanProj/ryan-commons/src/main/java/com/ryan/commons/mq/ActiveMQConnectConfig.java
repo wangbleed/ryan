@@ -1,6 +1,6 @@
-package com.hyron.commons.mq;
+package com.ryan.commons.mq;
 
-import com.hyron.commons.io.ConnectionConfig;
+import com.ryan.commons.io.ConnectionConfig;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.commons.lang3.StringUtils;
 
