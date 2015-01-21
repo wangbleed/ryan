@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
-import java.util.Iterator;
 
 /**
  * Created by Ryan on 2015/1/14.
@@ -16,7 +15,7 @@ import java.util.Iterator;
 public class JavaCompileTest {
 
     private static String PACKAGE_NAME = "com.ryan.compile";
-    private static String JAVA_CLASS_NAME = "DynamicObject";
+    private static String JAVA_CLASS_NAME = "JavaCompile";
     private static String JAVA_SOURCE_FILE = JAVA_CLASS_NAME + ".java";
     private static String JAVA_CLASS_FILE = JAVA_CLASS_NAME + ".class";
 
