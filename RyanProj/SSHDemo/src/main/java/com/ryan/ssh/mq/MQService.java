@@ -3,7 +3,7 @@ package com.ryan.ssh.mq;
 import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
 import com.ryan.commons.mq.ActiveMQConnectFactory;
-import com.ryan.commons.packet.MQPacket;
+import com.ryan.commons.packet.Packet;
 import com.ryan.commons.service.Service;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,7 +136,7 @@ public abstract class MQService extends Service{
         }
     }
 
-    protected void send(final MQPacket packet){
+    protected void send(final Packet packet){
         executorSend.execute(new Thread(){
             @Override
             public void run() {
