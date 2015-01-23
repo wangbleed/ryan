@@ -6,29 +6,15 @@
  */
 package com.ryan.commons.packet;
 
+import org.apache.thrift.EncodingUtils;
+import org.apache.thrift.TException;
+import org.apache.thrift.protocol.TTupleProtocol;
 import org.apache.thrift.scheme.IScheme;
 import org.apache.thrift.scheme.SchemeFactory;
 import org.apache.thrift.scheme.StandardScheme;
-
 import org.apache.thrift.scheme.TupleScheme;
-import org.apache.thrift.protocol.TTupleProtocol;
-import org.apache.thrift.protocol.TProtocolException;
-import org.apache.thrift.EncodingUtils;
-import org.apache.thrift.TException;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.EnumMap;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.EnumSet;
-import java.util.Collections;
-import java.util.BitSet;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.*;
 
 /**
  * 消息包头，说明后接的消息包体的内容和格式，每次发送消息需要首先发送PacketHead
@@ -37,9 +23,12 @@ import org.slf4j.LoggerFactory;
 public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHead._Fields>, java.io.Serializable, Cloneable {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("PacketHead");
 
-  private static final org.apache.thrift.protocol.TField VERSION_FIELD_DESC = new org.apache.thrift.protocol.TField("version", org.apache.thrift.protocol.TType.BYTE, (short)1);
-  private static final org.apache.thrift.protocol.TField ORDER_FIELD_DESC = new org.apache.thrift.protocol.TField("order", org.apache.thrift.protocol.TType.BYTE, (short)2);
-  private static final org.apache.thrift.protocol.TField SEQ_FIELD_DESC = new org.apache.thrift.protocol.TField("seq", org.apache.thrift.protocol.TType.I32, (short)3);
+  private static final org.apache.thrift.protocol.TField VERSION_FIELD_DESC = new org.apache.thrift.protocol.TField("version", org.apache.thrift.protocol.TType.I32, (short)1);
+  private static final org.apache.thrift.protocol.TField CMD_FIELD_DESC = new org.apache.thrift.protocol.TField("cmd", org.apache.thrift.protocol.TType.BYTE, (short)2);
+  private static final org.apache.thrift.protocol.TField TYPE_FIELD_DESC = new org.apache.thrift.protocol.TField("type", org.apache.thrift.protocol.TType.BYTE, (short)3);
+  private static final org.apache.thrift.protocol.TField ID_FIELD_DESC = new org.apache.thrift.protocol.TField("id", org.apache.thrift.protocol.TType.I32, (short)4);
+  private static final org.apache.thrift.protocol.TField SOURCE_FIELD_DESC = new org.apache.thrift.protocol.TField("source", org.apache.thrift.protocol.TType.STRING, (short)5);
+  private static final org.apache.thrift.protocol.TField EXT_MAP_FIELD_DESC = new org.apache.thrift.protocol.TField("extMap", org.apache.thrift.protocol.TType.MAP, (short)6);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -48,32 +37,56 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
   }
 
   /**
-   * 包版本  *
+   * 表示报文的版本号  *
    */
-  public byte version; // required
+  public int version; // optional
   /**
-   * 包指令，通过对这个位的判断决定后续解析什么数据包
+   * byte类型，表示body里封装的是哪一类数据（报警源信息、结点测点信息、报警信息、操作维护信息
    */
-  public byte order; // required
+  public byte cmd; // optional
   /**
-   * 包序列  *
+   * 表示封装body数据的类型（无、加密、压缩）  *
    */
-  public int seq; // required
+  public byte type; // optional
+  /**
+   * 报文的唯一编号
+   */
+  public int id; // optional
+  /**
+   * 报文的发送方
+   */
+  public String source; // optional
+  /**
+   * 表示扩展属性，预留
+   */
+  public Map<String,String> extMap; // optional
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     /**
-     * 包版本  *
+     * 表示报文的版本号  *
      */
     VERSION((short)1, "version"),
     /**
-     * 包指令，通过对这个位的判断决定后续解析什么数据包
+     * byte类型，表示body里封装的是哪一类数据（报警源信息、结点测点信息、报警信息、操作维护信息
      */
-    ORDER((short)2, "order"),
+    CMD((short)2, "cmd"),
     /**
-     * 包序列  *
+     * 表示封装body数据的类型（无、加密、压缩）  *
      */
-    SEQ((short)3, "seq");
+    TYPE((short)3, "type"),
+    /**
+     * 报文的唯一编号
+     */
+    ID((short)4, "id"),
+    /**
+     * 报文的发送方
+     */
+    SOURCE((short)5, "source"),
+    /**
+     * 表示扩展属性，预留
+     */
+    EXT_MAP((short)6, "extMap");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -90,10 +103,16 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
       switch(fieldId) {
         case 1: // VERSION
           return VERSION;
-        case 2: // ORDER
-          return ORDER;
-        case 3: // SEQ
-          return SEQ;
+        case 2: // CMD
+          return CMD;
+        case 3: // TYPE
+          return TYPE;
+        case 4: // ID
+          return ID;
+        case 5: // SOURCE
+          return SOURCE;
+        case 6: // EXT_MAP
+          return EXT_MAP;
         default:
           return null;
       }
@@ -135,39 +154,35 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
 
   // isset id assignments
   private static final int __VERSION_ISSET_ID = 0;
-  private static final int __ORDER_ISSET_ID = 1;
-  private static final int __SEQ_ISSET_ID = 2;
+  private static final int __CMD_ISSET_ID = 1;
+  private static final int __TYPE_ISSET_ID = 2;
+  private static final int __ID_ISSET_ID = 3;
   private byte __isset_bitfield = 0;
+  private _Fields optionals[] = {_Fields.VERSION, _Fields.CMD, _Fields.TYPE, _Fields.ID, _Fields.SOURCE, _Fields.EXT_MAP};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.VERSION, new org.apache.thrift.meta_data.FieldMetaData("version", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BYTE)));
-    tmpMap.put(_Fields.ORDER, new org.apache.thrift.meta_data.FieldMetaData("order", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BYTE)));
-    tmpMap.put(_Fields.SEQ, new org.apache.thrift.meta_data.FieldMetaData("seq", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+    tmpMap.put(_Fields.VERSION, new org.apache.thrift.meta_data.FieldMetaData("version", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
+    tmpMap.put(_Fields.CMD, new org.apache.thrift.meta_data.FieldMetaData("cmd", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BYTE)));
+    tmpMap.put(_Fields.TYPE, new org.apache.thrift.meta_data.FieldMetaData("type", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BYTE)));
+    tmpMap.put(_Fields.ID, new org.apache.thrift.meta_data.FieldMetaData("id", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32)));
+    tmpMap.put(_Fields.SOURCE, new org.apache.thrift.meta_data.FieldMetaData("source", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.EXT_MAP, new org.apache.thrift.meta_data.FieldMetaData("extMap", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+        new org.apache.thrift.meta_data.MapMetaData(org.apache.thrift.protocol.TType.MAP, 
+            new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING), 
+            new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(PacketHead.class, metaDataMap);
   }
 
   public PacketHead() {
-    this.version = (byte)1;
+    this.version = 1;
 
-  }
-
-  public PacketHead(
-    byte version,
-    byte order,
-    int seq)
-  {
-    this();
-    this.version = version;
-    setVersionIsSet(true);
-    this.order = order;
-    setOrderIsSet(true);
-    this.seq = seq;
-    setSeqIsSet(true);
   }
 
   /**
@@ -176,8 +191,27 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
   public PacketHead(PacketHead other) {
     __isset_bitfield = other.__isset_bitfield;
     this.version = other.version;
-    this.order = other.order;
-    this.seq = other.seq;
+    this.cmd = other.cmd;
+    this.type = other.type;
+    this.id = other.id;
+    if (other.isSetSource()) {
+      this.source = other.source;
+    }
+    if (other.isSetExtMap()) {
+      Map<String,String> __this__extMap = new HashMap<String,String>();
+      for (Map.Entry<String, String> other_element : other.extMap.entrySet()) {
+
+        String other_element_key = other_element.getKey();
+        String other_element_value = other_element.getValue();
+
+        String __this__extMap_copy_key = other_element_key;
+
+        String __this__extMap_copy_value = other_element_value;
+
+        __this__extMap.put(__this__extMap_copy_key, __this__extMap_copy_value);
+      }
+      this.extMap = __this__extMap;
+    }
   }
 
   public PacketHead deepCopy() {
@@ -186,25 +220,29 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
 
   @Override
   public void clear() {
-    this.version = (byte)1;
+    this.version = 1;
 
-    setOrderIsSet(false);
-    this.order = 0;
-    setSeqIsSet(false);
-    this.seq = 0;
+    setCmdIsSet(false);
+    this.cmd = 0;
+    setTypeIsSet(false);
+    this.type = 0;
+    setIdIsSet(false);
+    this.id = 0;
+    this.source = null;
+    this.extMap = null;
   }
 
   /**
-   * 包版本  *
+   * 表示报文的版本号  *
    */
-  public byte getVersion() {
+  public int getVersion() {
     return this.version;
   }
 
   /**
-   * 包版本  *
+   * 表示报文的版本号  *
    */
-  public PacketHead setVersion(byte version) {
+  public PacketHead setVersion(int version) {
     this.version = version;
     setVersionIsSet(true);
     return this;
@@ -224,61 +262,161 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
   }
 
   /**
-   * 包指令，通过对这个位的判断决定后续解析什么数据包
+   * byte类型，表示body里封装的是哪一类数据（报警源信息、结点测点信息、报警信息、操作维护信息
    */
-  public byte getOrder() {
-    return this.order;
+  public byte getCmd() {
+    return this.cmd;
   }
 
   /**
-   * 包指令，通过对这个位的判断决定后续解析什么数据包
+   * byte类型，表示body里封装的是哪一类数据（报警源信息、结点测点信息、报警信息、操作维护信息
    */
-  public PacketHead setOrder(byte order) {
-    this.order = order;
-    setOrderIsSet(true);
+  public PacketHead setCmd(byte cmd) {
+    this.cmd = cmd;
+    setCmdIsSet(true);
     return this;
   }
 
-  public void unsetOrder() {
-    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __ORDER_ISSET_ID);
+  public void unsetCmd() {
+    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __CMD_ISSET_ID);
   }
 
-  /** Returns true if field order is set (has been assigned a value) and false otherwise */
-  public boolean isSetOrder() {
-    return EncodingUtils.testBit(__isset_bitfield, __ORDER_ISSET_ID);
+  /** Returns true if field cmd is set (has been assigned a value) and false otherwise */
+  public boolean isSetCmd() {
+    return EncodingUtils.testBit(__isset_bitfield, __CMD_ISSET_ID);
   }
 
-  public void setOrderIsSet(boolean value) {
-    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __ORDER_ISSET_ID, value);
-  }
-
-  /**
-   * 包序列  *
-   */
-  public int getSeq() {
-    return this.seq;
+  public void setCmdIsSet(boolean value) {
+    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __CMD_ISSET_ID, value);
   }
 
   /**
-   * 包序列  *
+   * 表示封装body数据的类型（无、加密、压缩）  *
    */
-  public PacketHead setSeq(int seq) {
-    this.seq = seq;
-    setSeqIsSet(true);
+  public byte getType() {
+    return this.type;
+  }
+
+  /**
+   * 表示封装body数据的类型（无、加密、压缩）  *
+   */
+  public PacketHead setType(byte type) {
+    this.type = type;
+    setTypeIsSet(true);
     return this;
   }
 
-  public void unsetSeq() {
-    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __SEQ_ISSET_ID);
+  public void unsetType() {
+    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __TYPE_ISSET_ID);
   }
 
-  /** Returns true if field seq is set (has been assigned a value) and false otherwise */
-  public boolean isSetSeq() {
-    return EncodingUtils.testBit(__isset_bitfield, __SEQ_ISSET_ID);
+  /** Returns true if field type is set (has been assigned a value) and false otherwise */
+  public boolean isSetType() {
+    return EncodingUtils.testBit(__isset_bitfield, __TYPE_ISSET_ID);
   }
 
-  public void setSeqIsSet(boolean value) {
-    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __SEQ_ISSET_ID, value);
+  public void setTypeIsSet(boolean value) {
+    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __TYPE_ISSET_ID, value);
+  }
+
+  /**
+   * 报文的唯一编号
+   */
+  public int getId() {
+    return this.id;
+  }
+
+  /**
+   * 报文的唯一编号
+   */
+  public PacketHead setId(int id) {
+    this.id = id;
+    setIdIsSet(true);
+    return this;
+  }
+
+  public void unsetId() {
+    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __ID_ISSET_ID);
+  }
+
+  /** Returns true if field id is set (has been assigned a value) and false otherwise */
+  public boolean isSetId() {
+    return EncodingUtils.testBit(__isset_bitfield, __ID_ISSET_ID);
+  }
+
+  public void setIdIsSet(boolean value) {
+    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __ID_ISSET_ID, value);
+  }
+
+  /**
+   * 报文的发送方
+   */
+  public String getSource() {
+    return this.source;
+  }
+
+  /**
+   * 报文的发送方
+   */
+  public PacketHead setSource(String source) {
+    this.source = source;
+    return this;
+  }
+
+  public void unsetSource() {
+    this.source = null;
+  }
+
+  /** Returns true if field source is set (has been assigned a value) and false otherwise */
+  public boolean isSetSource() {
+    return this.source != null;
+  }
+
+  public void setSourceIsSet(boolean value) {
+    if (!value) {
+      this.source = null;
+    }
+  }
+
+  public int getExtMapSize() {
+    return (this.extMap == null) ? 0 : this.extMap.size();
+  }
+
+  public void putToExtMap(String key, String val) {
+    if (this.extMap == null) {
+      this.extMap = new HashMap<String,String>();
+    }
+    this.extMap.put(key, val);
+  }
+
+  /**
+   * 表示扩展属性，预留
+   */
+  public Map<String,String> getExtMap() {
+    return this.extMap;
+  }
+
+  /**
+   * 表示扩展属性，预留
+   */
+  public PacketHead setExtMap(Map<String,String> extMap) {
+    this.extMap = extMap;
+    return this;
+  }
+
+  public void unsetExtMap() {
+    this.extMap = null;
+  }
+
+  /** Returns true if field extMap is set (has been assigned a value) and false otherwise */
+  public boolean isSetExtMap() {
+    return this.extMap != null;
+  }
+
+  public void setExtMapIsSet(boolean value) {
+    if (!value) {
+      this.extMap = null;
+    }
   }
 
   public void setFieldValue(_Fields field, Object value) {
@@ -287,23 +425,47 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
       if (value == null) {
         unsetVersion();
       } else {
-        setVersion((Byte)value);
+        setVersion((Integer)value);
       }
       break;
 
-    case ORDER:
+    case CMD:
       if (value == null) {
-        unsetOrder();
+        unsetCmd();
       } else {
-        setOrder((Byte)value);
+        setCmd((Byte)value);
       }
       break;
 
-    case SEQ:
+    case TYPE:
       if (value == null) {
-        unsetSeq();
+        unsetType();
       } else {
-        setSeq((Integer)value);
+        setType((Byte)value);
+      }
+      break;
+
+    case ID:
+      if (value == null) {
+        unsetId();
+      } else {
+        setId((Integer)value);
+      }
+      break;
+
+    case SOURCE:
+      if (value == null) {
+        unsetSource();
+      } else {
+        setSource((String)value);
+      }
+      break;
+
+    case EXT_MAP:
+      if (value == null) {
+        unsetExtMap();
+      } else {
+        setExtMap((Map<String,String>)value);
       }
       break;
 
@@ -313,13 +475,22 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
   public Object getFieldValue(_Fields field) {
     switch (field) {
     case VERSION:
-      return Byte.valueOf(getVersion());
+      return Integer.valueOf(getVersion());
 
-    case ORDER:
-      return Byte.valueOf(getOrder());
+    case CMD:
+      return Byte.valueOf(getCmd());
 
-    case SEQ:
-      return Integer.valueOf(getSeq());
+    case TYPE:
+      return Byte.valueOf(getType());
+
+    case ID:
+      return Integer.valueOf(getId());
+
+    case SOURCE:
+      return getSource();
+
+    case EXT_MAP:
+      return getExtMap();
 
     }
     throw new IllegalStateException();
@@ -334,10 +505,16 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
     switch (field) {
     case VERSION:
       return isSetVersion();
-    case ORDER:
-      return isSetOrder();
-    case SEQ:
-      return isSetSeq();
+    case CMD:
+      return isSetCmd();
+    case TYPE:
+      return isSetType();
+    case ID:
+      return isSetId();
+    case SOURCE:
+      return isSetSource();
+    case EXT_MAP:
+      return isSetExtMap();
     }
     throw new IllegalStateException();
   }
@@ -355,8 +532,8 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
     if (that == null)
       return false;
 
-    boolean this_present_version = true;
-    boolean that_present_version = true;
+    boolean this_present_version = true && this.isSetVersion();
+    boolean that_present_version = true && that.isSetVersion();
     if (this_present_version || that_present_version) {
       if (!(this_present_version && that_present_version))
         return false;
@@ -364,21 +541,48 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
         return false;
     }
 
-    boolean this_present_order = true;
-    boolean that_present_order = true;
-    if (this_present_order || that_present_order) {
-      if (!(this_present_order && that_present_order))
+    boolean this_present_cmd = true && this.isSetCmd();
+    boolean that_present_cmd = true && that.isSetCmd();
+    if (this_present_cmd || that_present_cmd) {
+      if (!(this_present_cmd && that_present_cmd))
         return false;
-      if (this.order != that.order)
+      if (this.cmd != that.cmd)
         return false;
     }
 
-    boolean this_present_seq = true;
-    boolean that_present_seq = true;
-    if (this_present_seq || that_present_seq) {
-      if (!(this_present_seq && that_present_seq))
+    boolean this_present_type = true && this.isSetType();
+    boolean that_present_type = true && that.isSetType();
+    if (this_present_type || that_present_type) {
+      if (!(this_present_type && that_present_type))
         return false;
-      if (this.seq != that.seq)
+      if (this.type != that.type)
+        return false;
+    }
+
+    boolean this_present_id = true && this.isSetId();
+    boolean that_present_id = true && that.isSetId();
+    if (this_present_id || that_present_id) {
+      if (!(this_present_id && that_present_id))
+        return false;
+      if (this.id != that.id)
+        return false;
+    }
+
+    boolean this_present_source = true && this.isSetSource();
+    boolean that_present_source = true && that.isSetSource();
+    if (this_present_source || that_present_source) {
+      if (!(this_present_source && that_present_source))
+        return false;
+      if (!this.source.equals(that.source))
+        return false;
+    }
+
+    boolean this_present_extMap = true && this.isSetExtMap();
+    boolean that_present_extMap = true && that.isSetExtMap();
+    if (this_present_extMap || that_present_extMap) {
+      if (!(this_present_extMap && that_present_extMap))
+        return false;
+      if (!this.extMap.equals(that.extMap))
         return false;
     }
 
@@ -408,22 +612,52 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetOrder()).compareTo(typedOther.isSetOrder());
+    lastComparison = Boolean.valueOf(isSetCmd()).compareTo(typedOther.isSetCmd());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetOrder()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.order, typedOther.order);
+    if (isSetCmd()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.cmd, typedOther.cmd);
       if (lastComparison != 0) {
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetSeq()).compareTo(typedOther.isSetSeq());
+    lastComparison = Boolean.valueOf(isSetType()).compareTo(typedOther.isSetType());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetSeq()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.seq, typedOther.seq);
+    if (isSetType()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.type, typedOther.type);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetId()).compareTo(typedOther.isSetId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetId()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.id, typedOther.id);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetSource()).compareTo(typedOther.isSetSource());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetSource()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.source, typedOther.source);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = Boolean.valueOf(isSetExtMap()).compareTo(typedOther.isSetExtMap());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetExtMap()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.extMap, typedOther.extMap);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -435,11 +669,11 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
     return _Fields.findByThriftId(fieldId);
   }
 
-  public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+  public void read(org.apache.thrift.protocol.TProtocol iprot) throws TException {
     schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
   }
 
-  public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+  public void write(org.apache.thrift.protocol.TProtocol oprot) throws TException {
     schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
   }
 
@@ -448,22 +682,54 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
     StringBuilder sb = new StringBuilder("PacketHead(");
     boolean first = true;
 
-    sb.append("version:");
-    sb.append(this.version);
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("order:");
-    sb.append(this.order);
-    first = false;
-    if (!first) sb.append(", ");
-    sb.append("seq:");
-    sb.append(this.seq);
-    first = false;
+    if (isSetVersion()) {
+      sb.append("version:");
+      sb.append(this.version);
+      first = false;
+    }
+    if (isSetCmd()) {
+      if (!first) sb.append(", ");
+      sb.append("cmd:");
+      sb.append(this.cmd);
+      first = false;
+    }
+    if (isSetType()) {
+      if (!first) sb.append(", ");
+      sb.append("type:");
+      sb.append(this.type);
+      first = false;
+    }
+    if (isSetId()) {
+      if (!first) sb.append(", ");
+      sb.append("id:");
+      sb.append(this.id);
+      first = false;
+    }
+    if (isSetSource()) {
+      if (!first) sb.append(", ");
+      sb.append("source:");
+      if (this.source == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.source);
+      }
+      first = false;
+    }
+    if (isSetExtMap()) {
+      if (!first) sb.append(", ");
+      sb.append("extMap:");
+      if (this.extMap == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.extMap);
+      }
+      first = false;
+    }
     sb.append(")");
     return sb.toString();
   }
 
-  public void validate() throws org.apache.thrift.TException {
+  public void validate() throws TException {
     // check for required fields
     // check for sub-struct validity
   }
@@ -471,7 +737,7 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
   private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
     try {
       write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-    } catch (org.apache.thrift.TException te) {
+    } catch (TException te) {
       throw new java.io.IOException(te);
     }
   }
@@ -481,7 +747,7 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
       // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
       __isset_bitfield = 0;
       read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-    } catch (org.apache.thrift.TException te) {
+    } catch (TException te) {
       throw new java.io.IOException(te);
     }
   }
@@ -494,37 +760,73 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
 
   private static class PacketHeadStandardScheme extends StandardScheme<PacketHead> {
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot, PacketHead struct) throws org.apache.thrift.TException {
+    public void read(org.apache.thrift.protocol.TProtocol iprot, PacketHead struct) throws TException {
       org.apache.thrift.protocol.TField schemeField;
       iprot.readStructBegin();
       while (true)
       {
         schemeField = iprot.readFieldBegin();
-        if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+        if (schemeField.type == org.apache.thrift.protocol.TType.STOP) {
           break;
         }
         switch (schemeField.id) {
           case 1: // VERSION
-            if (schemeField.type == org.apache.thrift.protocol.TType.BYTE) {
-              struct.version = iprot.readByte();
-              struct.setVersionIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 2: // ORDER
-            if (schemeField.type == org.apache.thrift.protocol.TType.BYTE) {
-              struct.order = iprot.readByte();
-              struct.setOrderIsSet(true);
-            } else { 
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-            }
-            break;
-          case 3: // SEQ
             if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-              struct.seq = iprot.readI32();
-              struct.setSeqIsSet(true);
-            } else { 
+              struct.version = iprot.readI32();
+              struct.setVersionIsSet(true);
+            } else {
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 2: // CMD
+            if (schemeField.type == org.apache.thrift.protocol.TType.BYTE) {
+              struct.cmd = iprot.readByte();
+              struct.setCmdIsSet(true);
+            } else {
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 3: // TYPE
+            if (schemeField.type == org.apache.thrift.protocol.TType.BYTE) {
+              struct.type = iprot.readByte();
+              struct.setTypeIsSet(true);
+            } else {
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 4: // ID
+            if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
+              struct.id = iprot.readI32();
+              struct.setIdIsSet(true);
+            } else {
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 5: // SOURCE
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.source = iprot.readString();
+              struct.setSourceIsSet(true);
+            } else {
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 6: // EXT_MAP
+            if (schemeField.type == org.apache.thrift.protocol.TType.MAP) {
+              {
+                org.apache.thrift.protocol.TMap _map54 = iprot.readMapBegin();
+                struct.extMap = new HashMap<String,String>(2*_map54.size);
+                for (int _i55 = 0; _i55 < _map54.size; ++_i55)
+                {
+                  String _key56; // required
+                  String _val57; // required
+                  _key56 = iprot.readString();
+                  _val57 = iprot.readString();
+                  struct.extMap.put(_key56, _val57);
+                }
+                iprot.readMapEnd();
+              }
+              struct.setExtMapIsSet(true);
+            } else {
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
@@ -539,19 +841,52 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
       struct.validate();
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot, PacketHead struct) throws org.apache.thrift.TException {
+    public void write(org.apache.thrift.protocol.TProtocol oprot, PacketHead struct) throws TException {
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
-      oprot.writeFieldBegin(VERSION_FIELD_DESC);
-      oprot.writeByte(struct.version);
-      oprot.writeFieldEnd();
-      oprot.writeFieldBegin(ORDER_FIELD_DESC);
-      oprot.writeByte(struct.order);
-      oprot.writeFieldEnd();
-      oprot.writeFieldBegin(SEQ_FIELD_DESC);
-      oprot.writeI32(struct.seq);
-      oprot.writeFieldEnd();
+      if (struct.isSetVersion()) {
+        oprot.writeFieldBegin(VERSION_FIELD_DESC);
+        oprot.writeI32(struct.version);
+        oprot.writeFieldEnd();
+      }
+      if (struct.isSetCmd()) {
+        oprot.writeFieldBegin(CMD_FIELD_DESC);
+        oprot.writeByte(struct.cmd);
+        oprot.writeFieldEnd();
+      }
+      if (struct.isSetType()) {
+        oprot.writeFieldBegin(TYPE_FIELD_DESC);
+        oprot.writeByte(struct.type);
+        oprot.writeFieldEnd();
+      }
+      if (struct.isSetId()) {
+        oprot.writeFieldBegin(ID_FIELD_DESC);
+        oprot.writeI32(struct.id);
+        oprot.writeFieldEnd();
+      }
+      if (struct.source != null) {
+        if (struct.isSetSource()) {
+          oprot.writeFieldBegin(SOURCE_FIELD_DESC);
+          oprot.writeString(struct.source);
+          oprot.writeFieldEnd();
+        }
+      }
+      if (struct.extMap != null) {
+        if (struct.isSetExtMap()) {
+          oprot.writeFieldBegin(EXT_MAP_FIELD_DESC);
+          {
+            oprot.writeMapBegin(new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.STRING, org.apache.thrift.protocol.TType.STRING, struct.extMap.size()));
+            for (Map.Entry<String, String> _iter58 : struct.extMap.entrySet())
+            {
+              oprot.writeString(_iter58.getKey());
+              oprot.writeString(_iter58.getValue());
+            }
+            oprot.writeMapEnd();
+          }
+          oprot.writeFieldEnd();
+        }
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -567,45 +902,93 @@ public class PacketHead implements org.apache.thrift.TBase<PacketHead, PacketHea
   private static class PacketHeadTupleScheme extends TupleScheme<PacketHead> {
 
     @Override
-    public void write(org.apache.thrift.protocol.TProtocol prot, PacketHead struct) throws org.apache.thrift.TException {
+    public void write(org.apache.thrift.protocol.TProtocol prot, PacketHead struct) throws TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
       BitSet optionals = new BitSet();
       if (struct.isSetVersion()) {
         optionals.set(0);
       }
-      if (struct.isSetOrder()) {
+      if (struct.isSetCmd()) {
         optionals.set(1);
       }
-      if (struct.isSetSeq()) {
+      if (struct.isSetType()) {
         optionals.set(2);
       }
-      oprot.writeBitSet(optionals, 3);
+      if (struct.isSetId()) {
+        optionals.set(3);
+      }
+      if (struct.isSetSource()) {
+        optionals.set(4);
+      }
+      if (struct.isSetExtMap()) {
+        optionals.set(5);
+      }
+      oprot.writeBitSet(optionals, 6);
       if (struct.isSetVersion()) {
-        oprot.writeByte(struct.version);
+        oprot.writeI32(struct.version);
       }
-      if (struct.isSetOrder()) {
-        oprot.writeByte(struct.order);
+      if (struct.isSetCmd()) {
+        oprot.writeByte(struct.cmd);
       }
-      if (struct.isSetSeq()) {
-        oprot.writeI32(struct.seq);
+      if (struct.isSetType()) {
+        oprot.writeByte(struct.type);
+      }
+      if (struct.isSetId()) {
+        oprot.writeI32(struct.id);
+      }
+      if (struct.isSetSource()) {
+        oprot.writeString(struct.source);
+      }
+      if (struct.isSetExtMap()) {
+        {
+          oprot.writeI32(struct.extMap.size());
+          for (Map.Entry<String, String> _iter59 : struct.extMap.entrySet())
+          {
+            oprot.writeString(_iter59.getKey());
+            oprot.writeString(_iter59.getValue());
+          }
+        }
       }
     }
 
     @Override
-    public void read(org.apache.thrift.protocol.TProtocol prot, PacketHead struct) throws org.apache.thrift.TException {
+    public void read(org.apache.thrift.protocol.TProtocol prot, PacketHead struct) throws TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(3);
+      BitSet incoming = iprot.readBitSet(6);
       if (incoming.get(0)) {
-        struct.version = iprot.readByte();
+        struct.version = iprot.readI32();
         struct.setVersionIsSet(true);
       }
       if (incoming.get(1)) {
-        struct.order = iprot.readByte();
-        struct.setOrderIsSet(true);
+        struct.cmd = iprot.readByte();
+        struct.setCmdIsSet(true);
       }
       if (incoming.get(2)) {
-        struct.seq = iprot.readI32();
-        struct.setSeqIsSet(true);
+        struct.type = iprot.readByte();
+        struct.setTypeIsSet(true);
+      }
+      if (incoming.get(3)) {
+        struct.id = iprot.readI32();
+        struct.setIdIsSet(true);
+      }
+      if (incoming.get(4)) {
+        struct.source = iprot.readString();
+        struct.setSourceIsSet(true);
+      }
+      if (incoming.get(5)) {
+        {
+          org.apache.thrift.protocol.TMap _map60 = new org.apache.thrift.protocol.TMap(org.apache.thrift.protocol.TType.STRING, org.apache.thrift.protocol.TType.STRING, iprot.readI32());
+          struct.extMap = new HashMap<String,String>(2*_map60.size);
+          for (int _i61 = 0; _i61 < _map60.size; ++_i61)
+          {
+            String _key62; // required
+            String _val63; // required
+            _key62 = iprot.readString();
+            _val63 = iprot.readString();
+            struct.extMap.put(_key62, _val63);
+          }
+        }
+        struct.setExtMapIsSet(true);
       }
     }
   }
