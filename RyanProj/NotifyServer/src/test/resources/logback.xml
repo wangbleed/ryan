@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+    <property name="rootLog" value="../logs" />
+    <property name="project_name" value="NotifyServer" />
+    <property name="log_level" value="INFO" />
+
+    <!-- 打印到控制台 -->
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>${log_level}</level>
+        </filter>
+        <encoder>
+            <pattern>
+                %date %-5level [%-40thread] [%-30file:%-7line] %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- 不同級別的文件記錄在不同的日誌文件中 -->
+    <appender name="FILEINFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Encoding>UTF-8</Encoding>
+        <file>${rootLog}/${project_name}/${project_name}-info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${rootLog}/${project_name}/${project_name}-info.%d{yyyy-MM-dd}.log.zip</FileNamePattern>
+            <MaxHistory>7</MaxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="FILEERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Encoding>UTF-8</Encoding>
+        <file>${rootLog}/${project_name}/${project_name}-error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${rootLog}/${project_name}/${project_name}-error.%d{yyyy-MM-dd}.log.zip</FileNamePattern>
+            <MaxHistory>7</MaxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="FILEDEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Encoding>UTF-8</Encoding>
+        <file>${rootLog}/${project_name}/${project_name}-debug.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${rootLog}/${project_name}/${project_name}-debug.%d{yyyy-MM-dd}.log.zip</FileNamePattern>
+            <MaxHistory>7</MaxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 短信发送日志记录-->
+    <appender name="SENDLOG-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Encoding>UTF-8</Encoding>
+        <file>${rootLog}/${project_name}/sendSMSLog.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+        </filter>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${rootLog}/${project_name}/sendSMSLog.%d{yyyy-MM-dd}.log.zip
+            </fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>
+                {"time": "%date", %msg}%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- Push日志记录-->
+    <appender name="PUSH-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Encoding>UTF-8</Encoding>
+        <file>${rootLog}/${project_name}/push.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+        </filter>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${rootLog}/${project_name}/push.%d{yyyy-MM-dd}.log.zip
+            </fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>
+                {"time": "%date", %msg}%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework" level="ERROR"/>
+    <logger name="ch.qos.logback" level="ERROR"/>
+    <logger name="com.courier.db" level="${log_level}"/>
+    <logger name="com.courier.commons" level="${log_level}" />
+    <logger name="com.courier.core" level="${log_level}" />
+    <logger name="SENDLOG-LOG" level="${log_level}" additivity="false">
+        <appender-ref ref="SENDLOG-FILE"/>
+    </logger>
+    <logger name="PUSH-LOG" level="${log_level}" additivity="false">
+        <appender-ref ref="PUSH-FILE" />
+    </logger>
+    <root level="${log_level}">
+        <appender-ref ref="Console"/>
+        <appender-ref ref="FILEINFO"/>
+        <appender-ref ref="FILEERROR"/>
+        <appender-ref ref="FILEDEBUG"/>
+    </root>
+</configuration>
+
+

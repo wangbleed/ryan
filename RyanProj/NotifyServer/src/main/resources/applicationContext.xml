@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+        >
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.ryan.notify" />
+
+    <!-- 引入配置文件 -->
+    <!-- 属性文件自下而上覆盖前一个文件-->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" lazy-init="false">
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+        <property name="locations">
+            <list>
+                <value>classpath*:notify.properties</value>
+            </list>
+        </property>
+        <property name="fileEncoding" value="utf-8" />
+    </bean>
+
+    <!-- push -->
+    <bean id="pushReceiveMQClient" class="com.ryan.notify.service.base.push.PushReceiveMQClient" init-method="init" destroy-method="disconnect">
+        <property name="activeMQConnectFactory" ref="activeMQConnectFactory"/>
+        <property name="queueName" value="${activemq.push.queuenameByReceive}" />
+        <property name="threadNum" value="${activemq.push.receiveThreadPoolsCount}" />
+    </bean>
+    <bean id="pushSendMQClient" class="com.ryan.notify.service.base.push.PushSendMQClient" init-method="init" destroy-method="disconnect">
+        <property name="activeMQConnectFactory" ref="activeMQConnectFactory"/>
+        <property name="queueName" value="${activemq.push.queuenameByReceive}" />
+        <property name="threadNum" value="${activemq.push.receiveThreadPoolsCount}" />
+    </bean>
+
+    <!-- NotifyServer主服务-->
+    <bean id="notifyServer" class="com.ryan.commons.service.ServerEngine" init-method="init" destroy-method="stop">
+        <property name="serviceMap">
+            <map>
+                <entry key="smsService" value-ref="smsService" />
+                <entry key="pushService" value-ref="pushService" />
+            </map>
+        </property>
+    </bean>
+
+    <!-- ActiveMQ 基础配置-->
+    <bean id="activeMQConnectConfig" class="com.ryan.commons.mq.ActiveMQConnectConfig" init-method="init">
+        <property name="bPersistent" value="${activemq.persistent}" />
+        <property name="brokerUrl" value="${activemq.brokenurl}"/>
+        <property name="username" value="${activemq.username}"/>
+        <property name="password" value="${activemq.password}"/>
+        <property name="perBatchNum" value="${activemq.perbatchnum}"/>
+    </bean>
+
+    <bean id="activeMQConnectFactory" class="com.ryan.commons.mq.ActiveMQConnectFactory" init-method="init" destroy-method="disconnect">
+        <property name="activeMQConnectConfig" ref="activeMQConnectConfig" />
+    </bean>
+
+    <!--thread config-->
+    <bean id="threadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="${threadPool.corePoolSize}"/>
+        <property name="maxPoolSize" value="${threadPool.maxPoolSize}"/>
+        <property name="queueCapacity" value="${threadPool.queueCapacity}"/>
+        <property name="keepAliveSeconds" value="${threadPool.keepAliveSeconds}"/>
+        <property name="rejectedExecutionHandler">
+            <bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy"/>
+        </property>
+    </bean>
+
+    <!-- import xml -->
+    <import resource="classpath*:applicationSchedulerContext.xml"/>
+</beans>
