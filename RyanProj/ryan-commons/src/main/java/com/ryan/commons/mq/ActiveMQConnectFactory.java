@@ -1,15 +1,16 @@
 package com.ryan.commons.mq;
 
-import com.ryan.commons.io.ConnectionIO;
+import com.ryan.commons.util.io.ConnectionIO;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import javax.jms.*;
 
 /**
  * Created by Ryan
  */
-public class ActiveMQConnectFactory implements ConnectionIO{
+public class ActiveMQConnectFactory implements ConnectionIO {
 
     public final Logger logger = LoggerFactory.getLogger(this.getClass());
     private boolean bConnect = false;
@@ -29,6 +30,11 @@ public class ActiveMQConnectFactory implements ConnectionIO{
     Destination destination;
     // MessageProducer：消息发送者
     MessageProducer producer;
+
+    @Override
+    public void init() {
+        connect();
+    }
 
     private void initFactory(){
         connectionFactory = new ActiveMQConnectionFactory(
@@ -52,10 +58,6 @@ public class ActiveMQConnectFactory implements ConnectionIO{
             initFactory();
             connection = connectionFactory.createConnection();
             connection.start();
-//            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-//            destination = session.createQueue(activeMQConnectConfig.getQueueName());
-//            producer = session.createProducer(destination);
-//            producer.setDeliveryMode(activeMQConnectConfig.bPersistent ? DeliveryMode.PERSISTENT : DeliveryMode.NON_PERSISTENT);
             bConnect = true;
         } catch (JMSException e){
             logger.error("connect activemq error,brokenUrl:{}", activeMQConnectConfig.getBrokerUrl());
@@ -69,8 +71,11 @@ public class ActiveMQConnectFactory implements ConnectionIO{
         logger.info("disconnect activemq...brokenUrl:{}", activeMQConnectConfig.getBrokerUrl());
         boolean bFlag = false;
         try{
-            if(connection != null)
+            if(session != null)
+                session.close();
+            if(connection != null) {
                 connection.close();
+            }
             bConnect = false;
             bFlag = true;
         }catch (JMSException e){

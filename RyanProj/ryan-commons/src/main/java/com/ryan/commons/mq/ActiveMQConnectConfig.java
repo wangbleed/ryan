@@ -1,13 +1,13 @@
 package com.ryan.commons.mq;
 
-import com.ryan.commons.io.ConnectionConfig;
+import com.ryan.commons.util.io.ConnectionConfig;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by Ryan
  */
-public class ActiveMQConnectConfig implements ConnectionConfig{
+public class ActiveMQConnectConfig implements ConnectionConfig {
     final int DEFAULT_BATCH_NUM = 1;
     String username;
     String password;
@@ -21,6 +21,11 @@ public class ActiveMQConnectConfig implements ConnectionConfig{
         this.username = username;
         this.password = password;
         this.brokerUrl = brokerUrl;
+    }
+
+    @Override
+    public void init() {
+
     }
 
     public void setUsername(String username) {
